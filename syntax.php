@@ -185,13 +185,17 @@ class syntax_plugin_navbox extends DokuWiki_Syntax_Plugin {
                     $namespace = substr($line, $nsStart, ($tStart - $nsStart - 1));
                 }
                 // String for the working directory of the namespace
-                $dir = './data/pages/'.str_replace(':', '/', $namespace);
+				$path = $conf['savedir'].'/pages/';
+                $dir = $path.str_replace(':', '/', $namespace);
                 // Instantiate our Links variable
                 $links = '';
                 // Look in the directory and get all .txt files (doku pages)
                 foreach (glob($dir.'/*.txt') as $filename) {
-                    // Store each file as a new markup link
-                    $links .= '[['.str_replace('/', ':', substr($filename, 13, -4)).']]';
+					//Remove $path
+					$last_dir = explode($path, $filename);
+					$page_link = $last_dir[count($last_dir) - 1];
+                    // Store each file as a new markup link			
+                    $links .= '[['.str_replace('/', ':', substr($page_link, 0, -4)).']]';
                 }
                 // Identify if this should be a subgroup
                 if ($autoSub) {
